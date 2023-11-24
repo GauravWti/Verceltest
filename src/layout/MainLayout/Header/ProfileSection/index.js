@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 // material-ui
@@ -43,11 +43,13 @@ import { IconLogout, IconSettings, IconUser } from '@tabler/icons';
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
-  const {userid}=useParams();
-  console.log(userid);
+  
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
+  const[userid, setUserId]=useState();
+
+ 
 
  
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -106,6 +108,24 @@ const ProfileSection = () => {
 
     prevOpen.current = open;
   }, [open]);
+
+
+  useEffect(()=>{
+    const funuserid=async()=>{
+      const result=await fetch('http://localhost:5000/0auth/accesstoken',{
+       method:"GET",
+       credentials: "include",
+       headers: {
+         "Content-Type": "application/json",
+       },
+      })
+      const resdata=await result.json();
+      setUserId(resdata.userid);
+    console.log(resdata);  
+   }
+  
+   funuserid();
+  },[])
 
   return (
     <>

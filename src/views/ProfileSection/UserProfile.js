@@ -10,10 +10,10 @@ import { useParams } from "react-router";
 
 const UserProfile=()=>{
    const[profileData, setProfileData]=useState();
-//    console.log(profileData);
+
 
 const role=localStorage.getItem('role');
-   const {userid}=useParams();
+const {userid}=useParams();
 
 console.log(role);
 console.log(userid);
@@ -33,7 +33,10 @@ console.log(userid);
         
         console.log(profileData);
     }
+
+    
     fun();
+  
    },[])
 
 
