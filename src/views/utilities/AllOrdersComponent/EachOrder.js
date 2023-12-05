@@ -4,11 +4,12 @@ import { useState } from "react";
 import BookingAssign from "./BookingAssign";
 
 
-const EachOrder=({data})=>{
+const EachOrder=({handleAssignedBooking , data })=>{
 
     const [userdata, setUserData] = useState(null);
 
     const [popupwindow ,setpopupwindow]=useState(0);
+    
     
 
     const [color, setColor]=useState();
@@ -64,7 +65,7 @@ const EachOrder=({data})=>{
        
         fetchData()
        
-
+console.log('rendering');
     }, []);
 
     const handleAssign=()=>{
@@ -106,7 +107,7 @@ const EachOrder=({data})=>{
          </td>
    </tr>
     {
-        popupwindow===1?<BookingAssign setpopupwindow={setpopupwindow}  data={data} userdata={userdata} />:<></>
+        popupwindow===1?<BookingAssign handleAssignedBooking={handleAssignedBooking} setpopupwindow={setpopupwindow}  data={data} userdata={userdata}  />:<></>
     }
         
    

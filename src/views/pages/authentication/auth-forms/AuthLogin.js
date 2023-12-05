@@ -4,6 +4,9 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import Toast from "ui-component/Toast/Toast";
+import { BackendUrl } from "utils/config";
+
 // import { useNavigate } from "react-router";
 
 const AuthLogin = () => {
@@ -11,6 +14,10 @@ const AuthLogin = () => {
   
   const [userName , setUserName]=useState();
   const [password, setPassword]=useState();
+
+  const[toastPopup, setToastpopup]=useState();
+  const[toastMsg,setToastmsg]=useState();
+  const[toastType,setToastType]=useState();
  
 
   useEffect(() => {
@@ -42,7 +49,7 @@ const AuthLogin = () => {
       } else {
      
 
-        const response = await fetch(`http://localhost:5000/0auth/login`, {
+        const response = await fetch(`${BackendUrl}/0auth/Auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -59,8 +66,10 @@ const AuthLogin = () => {
         console.log(responseData);
 
         if (response.status === 200) {
-          
-          window.alert('Login done');
+          setToastType('success');
+          setToastpopup(true);
+          setToastmsg('Login done')
+          // window.alert('Login done');
           // Navigate(`free/utils/VendercarAssign/${responseData.vendorid}`)
           localStorage.setItem('id',responseData.userid)
           localStorage.setItem('role',responseData.role)
@@ -68,15 +77,26 @@ const AuthLogin = () => {
           window.location.href = `http://localhost:3000/dashboard/default`;
           
         } else {
-          console.error('Failed to register');
+          setToastType('error');
+          setToastpopup(true);
+          setToastmsg('wrong Credentails')
+          // console.error('Failed to register');
         }
       }
     } catch(error) {
-      console.error('Error:', error);
+      setToastType('error');
+          setToastpopup(true);
+          setToastmsg('someThing Went wrong Try again');
+      // console.error('Error:', error);
     }
   }
   return (
     <>
+    {   toastPopup===true?
+      <Toast  msg={toastMsg} type={toastType} setToastpopup={setToastpopup}/>:<></>
+
+    }
+    
       <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
               <div className="mb-5">
                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -115,7 +135,7 @@ const AuthLogin = () => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                    required
+                    
                   />
                 </div>
                 <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">

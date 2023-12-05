@@ -4,11 +4,14 @@ import { useState } from 'react';
 import Select from 'react-select';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useParams } from 'react-router';
+import {BackendUrl} from '../../../utils/config.js'
 
 
-const BookingAssign = ({setpopupwindow , data }) => {
+
+const BookingAssign = ({handleAssignedBooking , setpopupwindow , data }) => {
   const [selectVenders, setSelectVenders] = useState();
   const [venderList, setVenderList] = useState([]);
+  
 
   const userid=useParams().userid;
 
@@ -16,8 +19,11 @@ const BookingAssign = ({setpopupwindow , data }) => {
   useEffect(() => {
     const getAllVender = async () => {
       try {
-        const response = await fetch('http://localhost:5000/0auth/getAllVender', {
-          method: 'GET',
+        const response = await fetch(`${BackendUrl}/0auth/vendor/getVendorifCarPresent`, {
+          method: 'POST',
+          body:JSON.stringify({
+            cartype:data.car.type
+          }),
           headers: {
             'Content-Type': 'application/json'
           },
@@ -27,7 +33,7 @@ const BookingAssign = ({setpopupwindow , data }) => {
         const resdata = await response.json();
         console.log(resdata);
 
-        const newVenderList = resdata.map((data) => ({
+        const newVenderList = resdata.vendors.map((data) => ({
           value: data.venderName,
           label: data.venderName
         }));
@@ -53,10 +59,12 @@ const BookingAssign = ({setpopupwindow , data }) => {
     setpopupwindow(0);
   }
 
+  
+ 
 const carTransactionfun=async()=>{
       try{
          const result=await fetch('https://wticarrental.ae:3000/app/v1/reservation/assignVendorDetails',{
-          method:'patch',
+          method:'PATCH',
           body:JSON.stringify({
             reservationID: data.reservationID  ,
             vendorID: selectVenders.value
@@ -66,17 +74,20 @@ const carTransactionfun=async()=>{
           },
           credentials: 'include',
          })
-         console.log(result);
+        //  console.log(result);
+         window.location.reload();
+        handleAssignedBooking();
       }
       catch(err){
         console.log('err in carTransactionfun');
       }
 }
+const role=localStorage.getItem('role');
 
-  const handlesubmit=async()=>{
+const handlesubmit=async()=>{
  console.log(selectVenders);
     try{
-      const result=await fetch('http://localhost:5000/0auth/addReservationToVender',{
+      const result=await fetch(`${BackendUrl}/0auth/vendor/addReservationToVender`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,6 +97,8 @@ const carTransactionfun=async()=>{
           reservationId:data.reservationID,
           carType:data.car.type,
           Operatorid:userid,
+          role:role,
+          
           
           
         }),

@@ -5,6 +5,8 @@ import Select from "react-select";
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import axios from 'axios';
+import {BackendUrl} from '../../../utils/config.js'
+
 
 const NewVender = () =>{
   
@@ -33,7 +35,7 @@ const NewVender = () =>{
         return;
       } else {
         const filteredDataidproof = idproofList.filter(entry => entry.IdProofType !== '' || entry.Link !== '');
-        const response = await fetch(`http://localhost:5000/0auth/addvender`, {
+        const response = await fetch(`${BackendUrl}/0auth/vendor/addvender`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,7 +60,7 @@ const NewVender = () =>{
         const responseData = await response.json();
         console.log(responseData);
   
-        if (response.status === 201) {
+        if (response.status === 200) {
           window.alert('New vender added');
           window.location.reload(); // Reload the page
         } else {

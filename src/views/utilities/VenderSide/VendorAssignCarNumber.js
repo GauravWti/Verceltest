@@ -3,8 +3,9 @@ import { useParams } from "react-router";
 
 // Uncomment the following import if CancelIcon is needed
 import CancelIcon from '@mui/icons-material/Cancel';
+import { BackendUrl } from "utils/config";
 
-const VendorAssignCarNumber = ({ setpopupwindow, reservationDetails }) => {
+const VendorAssignCarNumber = ({ setpopupwindow, reservationDetails , handleCarNumberAssigned }) => {
   const [carNumber, setCarNumber] = useState("");
   const { venderID } = useParams();
 
@@ -14,7 +15,7 @@ const VendorAssignCarNumber = ({ setpopupwindow, reservationDetails }) => {
       
       // console.log(reservationDetails[0]?.travelItenary.pickupTime);
 
-      const result = await fetch(`http://localhost:5000/0auth/setCarNumbertovender/${venderID}`, {
+      const result = await fetch(`${BackendUrl}/0auth/vendor/setCarNumbertovender/${venderID}`, {
         method: "POST",
         body: JSON.stringify({
           carType: reservationDetails[0].car.type,
@@ -32,6 +33,7 @@ const VendorAssignCarNumber = ({ setpopupwindow, reservationDetails }) => {
       });
 
       const resdata = await result.json();
+      handleCarNumberAssigned();
       console.log("running" + resdata);
       handleclose();
     } catch (err) {

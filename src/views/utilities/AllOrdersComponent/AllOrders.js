@@ -7,26 +7,35 @@ const AllOrders = () => {
  
   const [reservationD, setreservationDetails] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  
+  const itemsPerPage = 10;
+
+  const [AssignedBooking, setAssignedBooking]=useState(true);
+
+ const handleAssignedBooking=()=>{
+    setAssignedBooking(!AssignedBooking);
+    
+}
+console.log(AssignedBooking);
 
 
 
 
   useEffect(() => {
-    const fun = async () => {
-      try {
+    // console.log("rendering");
+    // const fun = async () => {
+    //   try {
       
 
-        const resData = await result.json();
-        // console.log(resData.result);
-        setUserData(resData.result);
-        // setuserData(resData);
-        // console.log(userData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+    //     const resData = await result.json();
+    //     // console.log(resData.result);
+    //     setUserData(resData.result);
+    //     // setuserData(resData);
+    //     // console.log(userData);
+    //   } catch (error) {
+    //     console.error('Error fetching data:', error);
+    //   }
+    // };
+    
     const reservationfun = async () => {
       try {
         const result1 = await fetch('https://wticarrental.ae:3000/app/v1/reservation/getReservations', {
@@ -38,7 +47,7 @@ const AllOrders = () => {
           }
         });
         const resData1 = await result1.json();
-        console.log(resData1.result[0].reservationID);
+        console.log(resData1.result);
         
         setreservationDetails(resData1.result);
 
@@ -48,9 +57,9 @@ const AllOrders = () => {
       }
     };
 
-    fun();
+    // fun();
     reservationfun();
-  }, []); // empty dependency array to run only once
+  }, [AssignedBooking]); // empty dependency array to run only once
 
   const lastIndex = currentPage * itemsPerPage;
   const firstIndex = lastIndex - itemsPerPage;
@@ -85,29 +94,29 @@ const AllOrders = () => {
       <div className='relative'>
         <div className="flex gap-4 flex-wrap">
           <div className="flex gap-2 items-center">
-            <span className="bg-yellow-200 h-[10px] w-[10px]"></span>
-            <p>Pending</p>
+            <span className="bg-gray-400 h-[10px] w-[10px]"></span>
+            <p>Not Assigned</p>
           </div>
-          <div className="flex gap-2 items-center">
+          {/* <div className="flex gap-2 items-center">
             <span className="bg-red-200 h-[10px] w-[10px]"></span>
             <p>Cancelled</p>
-          </div>
+          </div> */}
           <div className="flex gap-2 items-center">
             <span className="bg-green-300 h-[10px] w-[10px]"></span>
-            <p>Complete</p>
+            <p>Assigned</p>
           </div>
-          <div className="flex gap-2 items-center">
+          {/* <div className="flex gap-2 items-center">
             <span className="bg-pink-300 h-[10px] w-[10px]"></span>
             <p>Enroute</p>
-          </div>
-          <div className="flex gap-2 items-center">
+          </div> */}
+          {/* <div className="flex gap-2 items-center">
             <span className="bg-orange-300 h-[10px] w-[10px]"></span>
             <p>Noshow</p>
-          </div>
-          <div className="flex gap-2 items-center">
+          </div> */}
+          {/* <div className="flex gap-2 items-center">
             <span className="bg-slate-200 h-[10px] w-[10px]"></span>
             <p>Overdue</p>
-          </div>
+          </div> */}
         </div>
       </div>
       {currentItems ? (
@@ -127,7 +136,7 @@ const AllOrders = () => {
             </thead>
             <tbody>
               {currentItems.map((data, key) => (
-                <EachOrder data={data} key={key} />
+                <EachOrder handleAssignedBooking ={handleAssignedBooking} data={data} key={key}  />
               ))}
             </tbody>
           </table>

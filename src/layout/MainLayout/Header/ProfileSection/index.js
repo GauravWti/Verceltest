@@ -11,7 +11,7 @@ import {
   
   Chip,
   ClickAwayListener,
- 
+
   Grid,
   // InputAdornment,
   List,
@@ -37,16 +37,22 @@ import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 // import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
+
 import { IconLogout, IconSettings, IconUser } from '@tabler/icons';
+import { BackendUrl } from 'utils/config';
+
 
 
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
-  
+  const role=localStorage.getItem('role');
+
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
+
+// eslint-disable-next-line no-unused-vars
   const[userid, setUserId]=useState();
 
  
@@ -54,6 +60,7 @@ const ProfileSection = () => {
  
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
+  
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
@@ -112,7 +119,7 @@ const ProfileSection = () => {
 
   useEffect(()=>{
     const funuserid=async()=>{
-      const result=await fetch('http://localhost:5000/0auth/accesstoken',{
+      const result=await fetch(`${BackendUrl}/0auth/Auth/accesstoken`,{
        method:"GET",
        credentials: "include",
        headers: {
@@ -196,13 +203,19 @@ const ProfileSection = () => {
                 <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
                   <Box sx={{ p: 2 }}>
                     <Stack>
-                      <Stack direction="row" spacing={0.5} alignItems="center">
+                      {/* <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">Good Morning,</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
                           Johne Doe
                         </Typography>
-                      </Stack>
-                      <Typography variant="subtitle2">Vendor</Typography>
+                      </Stack> */}
+
+                    <Stack direction="row" spacing={0.5} alignItems="center">
+                            <Typography variant="h4">{role}</Typography>
+                           
+                          </Stack>
+
+                      {/* <Typography variant="subtitle2">{role}</Typography> */}
                     </Stack>
                     
                   </Box>
@@ -226,7 +239,7 @@ const ProfileSection = () => {
                           }
                         }}
                       >
-                        
+                        { role==='Vendor'||role==='Operator'?
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 1}
@@ -254,7 +267,9 @@ const ProfileSection = () => {
                               </Grid>
                             }
                           />
-                        </ListItemButton>
+                        </ListItemButton>:<></>
+
+                        }
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 4}

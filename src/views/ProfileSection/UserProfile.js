@@ -6,6 +6,7 @@ import { Divider } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router";
+import { BackendUrl } from "utils/config";
 
 
 const UserProfile=()=>{
@@ -19,7 +20,7 @@ console.log(role);
 console.log(userid);
    useEffect(()=>{
     const fun=async()=>{
-        const result=await fetch('http://localhost:5000/0auth/getprofiledata',{
+        const result=await fetch(`${BackendUrl}/0auth/profile/getprofiledata`,{
             method:'POST',
             body:JSON.stringify({id:userid, role:role}),
             credentials: "include",

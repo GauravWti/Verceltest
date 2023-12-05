@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useParams } from "react-router";
 import VenderEachOrder from "./VenderEachOrder";
 import VenderonDutyNumber from "./VenderonDutyNumber";
+import { BackendUrl } from "utils/config";
 
 const VenderAllBooking=()=>{
     const [booking , setBooking]=useState([]);
@@ -62,10 +63,13 @@ const VenderAllBooking=()=>{
 
 //   },[])
 
+const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 5;
+
 
 const func = async () => {
   try {
-    const result = await fetch(`http://localhost:5000/0auth/getAllBookingIdofParticularVender/${venderID}`, {
+    const result = await fetch(`${BackendUrl}/0auth/vendor/getAllBookingIdofParticularVender/${venderID}`, {
       method: 'GET',
     });
 
@@ -85,7 +89,7 @@ const func = async () => {
 const getcountOfallBookingcarArr = async () => {
   console.log('running arr');
   try {
-    const result = await fetch(`http://localhost:5000/0auth/getAllBookingCarOfParticularVendor/${venderID}`, {
+    const result = await fetch(`${BackendUrl}/0auth/vendor/getAllBookingCarOfParticularVendor/${venderID}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -115,6 +119,23 @@ useEffect(() => {
   }
 }, [venderID]);
 
+const lastIndex = currentPage * itemsPerPage;
+  const firstIndex = lastIndex - itemsPerPage;
+  const currentItems = booking?.slice(firstIndex, lastIndex);
+
+  const paginate = (str) => {
+    if(str==='i' && currentPage<totalpage){
+        setCurrentPage(currentPage+1);
+
+    }
+    else if(str==='d' && currentPage>1){
+        setCurrentPage(currentPage-1);
+    }
+  };
+
+  const totalpage=Math.ceil(booking?.length / itemsPerPage);
+  const firstshowpagenumber=currentPage;
+  const LastshowPagenumber=currentPage+3;
 
   return(
     <>
@@ -162,13 +183,35 @@ useEffect(() => {
     </thead>
     <tbody>
     {
-            booking.map((data,key)=>(
+            currentItems.map((data,key)=>(
                 // <p key={key}>{data.reservationId}</p>
                  <VenderEachOrder key={key} data={data} />
                 ))
            }
     </tbody>
   </table>
+  <div className="flex justify-center mt-4 items-center gap-2">
+      <button onClick={()=>paginate('d')} className={` ${1===currentPage?'cursor-not-allowed':''} text-[8px] px-1 py-1 rounded-lg bg-blue-400 text-white`}>Prev Page</button>
+
+      {[...Array(totalpage)].map((_, index) => {
+              const pageNumber = index + 1;
+              if (pageNumber >= firstshowpagenumber && pageNumber <= LastshowPagenumber) {
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentPage(pageNumber)}
+                    className={`mx-1 px-3 py-1 border ${currentPage === pageNumber ? 'bg-blue-500 text-white' : ''}`}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              }
+              return null;
+            })}
+        
+
+        <button onClick={()=>paginate('i')}  className={`${totalpage==currentPage?'cursor-not-allowed':''}  text-[8px] px-1 py-1 rounded-lg bg-blue-400 text-white`}>next Page</button>
+      </div>
 </div>:<>Loading...</>
 
         

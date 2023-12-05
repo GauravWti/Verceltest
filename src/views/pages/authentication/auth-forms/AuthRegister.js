@@ -2,15 +2,25 @@ import { selectClasses } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import Select from 'react-select';
+import Toast from "ui-component/Toast/Toast";
+import { BackendUrl } from "utils/config";
 
 const AuthRegister=()=>{
   const [selectRole, setSelectRole] = useState();
   const [userName , setUserName]=useState();
   const [password, setPassword]=useState();
   const [vendorName,setVendorName]=useState();
+
+  const[toastPopup, setToastpopup]=useState();
+  const[toastMsg,setToastmsg]=useState();
+  const[toastType,setToastType]=useState();
+ 
   const RoleList = [
     { value: 'Vendor', label: 'Vendor' },
     { value: 'Operator', label: 'Operator' },
+    { value: 'Marketing', label: 'Marketing' },
+    { value: 'Admin', label: 'Admin' },
+    { value: 'Checker', label: 'Checker' },
   ];
 
   function handleSelect(data) {
@@ -31,7 +41,7 @@ const AuthRegister=()=>{
       } else {
      
 
-        const response = await fetch(`http://localhost:5000/0auth/register`, {
+        const response = await fetch(`${BackendUrl}/0auth/Auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -48,21 +58,33 @@ const AuthRegister=()=>{
 
         const responseData = await response.json();
         console.log(responseData);
-
+        console.log(response.status);
         if (response.status === 200) {
-          window.alert('register done');
+          setToastType('success');
+          setToastpopup(true);
+          setToastmsg('Registeration done')
           window.location.reload(); 
         } else {
-          console.error('Failed to register');
+          setToastType('error');
+          setToastpopup(true);
+          setToastmsg('someThing Went wrong Try again')
+          // console.error('Failed to register');
         }
       }
     } catch(error) {
-      console.error('Error:', error);
+      setToastType('error');
+      setToastpopup(true);
+      setToastmsg('someThing Went wrong Try again')
+      // console.error('Error:', error);
     }
   }
 
   return (
     <>
+     {   toastPopup===true?
+      <Toast  msg={toastMsg} type={toastType} setToastpopup={setToastpopup}/>:<></>
+
+    }
         <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
               <div className="mb-5">
                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

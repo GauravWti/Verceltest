@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import VendorAssignCarNumber from "./VendorAssignCarNumber";
 import { useParams } from "react-router";
+import { BackendUrl } from "utils/config";
 
 const VenderEachOrder = ({ data }) => {
     const [popupwindow ,setpopupwindow]=useState(0);
   const [userData, setUserData] = useState(null);
   const [reservationDetails, setReservationDetails] = useState(null);
   const [currbookingstatus,setcurrbookingstatus]=useState();
+  const [carNumberAssigned, setCarNumberAssigned] = useState(false);
+
+  const handleCarNumberAssigned = () => {
+    setCarNumberAssigned(!carNumberAssigned);
+    // console.log(carNumberAssigned);
+  };
 
   function filterByReservationID(reservations, reservationID) {
     return reservations.filter(
@@ -70,7 +77,7 @@ const VenderEachOrder = ({ data }) => {
 
    
     const getResevationStatus=async()=>{
-      const result=await fetch(`http://localhost:5000/0auth/getstatusofCarTransactionforVendor/${venderID}`,{
+      const result=await fetch(`${BackendUrl}/0auth/vendor/getstatusofCarTransactionforVendor/${venderID}`,{
         method:'POST',
         body:JSON.stringify({
           reservationId:reservationID
@@ -90,7 +97,7 @@ const VenderEachOrder = ({ data }) => {
 
     reservationfun();
     getResevationStatus();
-  }, [reservationID]); // dependency includes reservationID
+  }, [reservationID, carNumberAssigned]); // dependency includes reservationID
 
   console.log('each booking');
 
@@ -133,7 +140,7 @@ const VenderEachOrder = ({ data }) => {
           </td>
         </tr>
         {
-            popupwindow===1?<VendorAssignCarNumber  setpopupwindow={setpopupwindow} reservationDetails={reservationDetails}   />:<></>
+            popupwindow===1?<VendorAssignCarNumber handleCarNumberAssigned={handleCarNumberAssigned}  setpopupwindow={setpopupwindow} reservationDetails={reservationDetails}   />:<></>
         }
         </>
       ) : (

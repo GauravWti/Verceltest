@@ -4,19 +4,14 @@ import Select from "react-select";
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { useEffect } from "react";
+import {BackendUrl} from '../../../utils/config.js'
 
 const NewCar = () => {
   const [selectVenders, setSelectVenders] = useState();
   const[venderList,setVenderList]=useState([]);
   const [inputList, setInputList] = useState([{ vehicleType: "", quantity: "" }]);
 
-  // const VenderList = [
-  //   // { value: "Gaurav Car Service", label: "Gaurav Car Service" },
-  //   // { value: "Sumit car vender", label: "Sumit car vender" },
-  //   // { value: "Dhruv car point", label: "Dhruv car point" },
-  //   // { value: "Neel vender", label: "Neel vender" },
-  //   // { value: "Wti Vender", label: "Wti Vender" },
-  // ];
+
 
   const CarTypeList=[
     {value:"Compact Cars",label:"Compact Cars"},
@@ -24,11 +19,12 @@ const NewCar = () => {
     {value:"4x4",label:"4x4"},
   ]
 
+  
 
   useEffect(() => {
     const getAllVender = async () => {
       try {
-        const response = await fetch('http://localhost:5000/0auth/getAllVender', {
+        const response = await fetch(`${BackendUrl}/0auth/vendor/getAllVender`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +53,7 @@ const NewCar = () => {
     setSelectVenders(data);
 
     try {
-      const res = await fetch("http://localhost:5000/0auth/getAllCars", {
+      const res = await fetch(`${BackendUrl}/0auth/vendor/getAllCars`, {
         method: "POST",
         body: JSON.stringify({
           venderName: data.value, // Use data.value instead of selectVenders.value
@@ -88,10 +84,31 @@ const NewCar = () => {
     }
   }
 
+  const isFormValid = () => {
+    // Check if vender is selected
+    if (!selectVenders || !selectVenders.value) {
+      window.alert('Please select a Vender.');
+      return false;
+    }
+  
+    // Check if any quantity is empty
+    const isQuantityInvalid = inputList.some(
+      (item) => !item.quantity || isNaN(Number(item.quantity))
+    );
+    if (isQuantityInvalid) {
+      window.alert('Quantity is required for all car types.');
+      return false;
+    }
+  
+    return true;
+  };
+
   const handleInputChange = (value, index, name) => {
     const list = [...inputList];
     list[index][name] = value;
-    setInputList(list);
+ 
+        setInputList(list);
+      
   };
 
   const handleRemoveClick = (index) => {
@@ -105,11 +122,13 @@ const NewCar = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(selectVenders.value);
-    console.log(inputList);
+   
+    if (!isFormValid()) {
+      return; // Stop submission if the form is not valid
+    }
 
     try {
-      const res = await fetch("http://localhost:5000/0auth/addCarquantity", {
+      const res = await fetch(`${BackendUrl}/0auth/vendor/addCarquantity`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -151,6 +170,7 @@ const NewCar = () => {
             className="w-full md:w-[40%]"
             options={CarTypeList}
             placeholder="Select car type"
+           
             value={CarTypeList.find((option) => option.value === x.vehicleType)}
             onChange={(data) => handleInputChange(data.value, i, "vehicleType")}
             isSearchable={true}
