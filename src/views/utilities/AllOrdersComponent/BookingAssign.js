@@ -74,7 +74,7 @@ const carTransactionfun=async()=>{
           },
           credentials: 'include',
          })
-        //  console.log(result);
+         console.log(result);
          window.location.reload();
         handleAssignedBooking();
       }

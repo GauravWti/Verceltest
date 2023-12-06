@@ -152,6 +152,7 @@ function FineComponent({ id, onDelete, onSave }) {
                     className={`${
                       file == "" ? "hidden" : ""
                     } w-fit rounded  hover:ring`}
+                    alt="Car Image"
                   />
                   <div
                     onClick={handleCloseImage}

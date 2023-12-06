@@ -72,8 +72,7 @@ function BookingCarCard(props) {
             onError={(e) => {
               e.target.src = "../static/staticcarimage.png";
             }}
-            classNa
-            me={`object-cover ${
+            className={`object-cover ${
               props?.carDetails?.imageName == undefined
                 ? "missing-image rounded mb-2"
                 : ""

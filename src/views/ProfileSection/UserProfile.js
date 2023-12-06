@@ -46,14 +46,14 @@ console.log(userid);
     return(
         <>
         <div>
-            <img src="https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80"/>
+            <img src="https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80" alt="Sunset over the mountains"/>
         </div>
      <div className="flex flex-col gap-4 mx-7 px-6 rounded-xl py-2 relative bottom-8 shadow-lg bg-white">
 
         
         <div className="flex justify-center w-32 h-32 mx-auto ">
             
-                <img className="rounded-full w-32 h-32 absolute -top-7" src='https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80'/>
+                <img className="rounded-full w-32 h-32 absolute -top-7" src='https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80' alt="your profile"/>
             
 
         </div>
