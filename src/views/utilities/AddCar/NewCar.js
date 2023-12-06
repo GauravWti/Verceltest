@@ -9,7 +9,7 @@ import {BackendUrl} from '../../../utils/config.js'
 const NewCar = () => {
   const [selectVenders, setSelectVenders] = useState();
   const[venderList,setVenderList]=useState([]);
-  const [inputList, setInputList] = useState([{ vehicleType: "", quantity: "" }]);
+  const [inputList, setInputList] = useState([{ vehicleType: "", quantity: "", price:"" }]);
 
 
 
@@ -70,10 +70,11 @@ const NewCar = () => {
       const newInputList = resdata.map((element) => ({
         vehicleType: element.vehicleType,
         quantity: element.quantity,
+        price:element.price
       }));
        
       if(newInputList.length==0){
-       setInputList( [{ vehicleType: "", quantity: "" }]);
+       setInputList( [{ vehicleType: "", quantity: "" , price:""}]);
       }
       else{
 
@@ -118,7 +119,7 @@ const NewCar = () => {
   };
 
   const handleAddClick = () => {
-    setInputList([...inputList, { vehicleType: "", quantity: "" }]);
+    setInputList([...inputList, { vehicleType: "", quantity: "" , price:""}]);
   };
 
   const handleSubmit = async () => {
@@ -181,6 +182,13 @@ const NewCar = () => {
             placeholder="Enter Car Quantity"
             value={x.quantity}
             onChange={(e) => handleInputChange(e.target.value, i, "quantity")}
+            />
+            <input
+            className="w-full md:w-[40%] block  px-4 py-2 text-[#053B50] border-black border-[1px] bg-white rounded-md focus:border-[#053B50] focus:ring-[#053B50] focus:outline-none focus:ring focus:ring-opacity-40"
+            name="Price"
+            placeholder="Enter Car Price"
+            value={x.price}
+            onChange={(e) => handleInputChange(e.target.value, i, "price")}
             />
           <div className="btn-box  ">
             {inputList.length !== 1 && (
